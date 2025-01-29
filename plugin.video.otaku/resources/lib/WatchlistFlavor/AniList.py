@@ -217,7 +217,10 @@ class AniListWLF(WatchlistFlavorBase):
         title = res['title'].get(self._title_lang) or res['title'].get('userPreferred')
 
         info = {
-            'unique_ids': {'anilist_id': str(anilist_id)},
+            'unique_ids': {
+                'anilist_id': str(anilist_id),
+                **database.get_all_ids_by_anilist_id(str(anilist_id))
+            },
             'title': title,
             'genre': res.get('genres'),
             'status': res.get('status'),
@@ -333,7 +336,10 @@ class AniListWLF(WatchlistFlavorBase):
             aired = next_up_meta.get('aired')
 
         info = {
-            'unique_ids': {'anilist_id': str(anilist_id)},
+            'unique_ids': {
+                'anilist_id': str(anilist_id),
+                **database.get_all_ids_by_anilist_id(str(anilist_id))
+            },
             'episode': next_up,
             'title': title,
             'tvshowtitle': res['title']['userPreferred'],

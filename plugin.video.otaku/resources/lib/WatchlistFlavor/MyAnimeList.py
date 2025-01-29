@@ -188,7 +188,10 @@ class MyAnimeListWLF(WatchlistFlavorBase):
             'mpaa': res['node'].get('rating'),
             'mediatype': 'tvshow',
             'studio': [x.get('name') for x in res['node']['studios']],
-            'unique_ids': {'mal_id': str(res['node']['id'])}
+            'unique_ids': {
+                'mal_id': str(res['node']['id']),
+                **database.get_all_ids_by_mal_id(str(res['node']['id']))
+            }
         }
 
         try:
@@ -250,7 +253,10 @@ class MyAnimeListWLF(WatchlistFlavorBase):
             'plot': plot,
             'mediatype': 'episode',
             'aired': aired,
-            'unique_ids': {'mal_id': str(res['node']['id'])}
+            'unique_ids': {
+                'mal_id': str(res['node']['id']),
+                **database.get_all_ids_by_mal_id(str(res['node']['id']))
+            }
         }
 
         base = {

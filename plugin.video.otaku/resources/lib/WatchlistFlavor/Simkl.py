@@ -151,7 +151,10 @@ class SimklWLF(WatchlistFlavorBase):
         unique_ids = {
             'mal_id': str(show_ids.get('mal', '')),
             'anilist_id': str(show_ids.get('anilist', '')),
-            'kitsu_id': str(show_ids.get('kitsu', ''))
+            'kitsu_id': str(show_ids.get('kitsu', '')),
+            **database.get_all_ids_by_mal_id(str(show_ids.get('mal', ''))),
+            **database.get_all_ids_by_anilist_id(str(show_ids.get('anilist', ''))),
+            **database.get_all_ids_by_kitsu_id(str(show_ids.get('kitsu', '')))
         }
 
         show = database.get_show(anilist_id)
