@@ -1,67 +1,82 @@
-[![Kodi version](https://img.shields.io/badge/kodi%20versions18/19/20/21-blue)](https://kodi.tv/)
-[![License: GPL3](https://img.shields.io/badge/License-GPL3-yellow.svg)](https://opensource.org/licenses/GPL-3.0)
+# 📺 Otaku Repository
 
-# Otaku Repository
+[![Kodi version](https://img.shields.io/badge/Kodi%2020+/21-blue?style=for-the-badge)](https://kodi.tv/)
+[![License: GPL3](https://img.shields.io/badge/License-GPL3-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/GPL-3.0)
 
-This addon is a fork of the original Kaito addon made by SwagOtaku.
+This is a **fork of the original Kaito addon** made by **SwagOtaku**.  
+⚠️ **All credit goes to SwagOtaku for the original work.**  
 
-All credit goes to SwagOtaku.
+---
 
-## Requires
+## 📌 Requirements
 
-Kodi 18 Leia or later versions.
-Works fine on Kodi 20+
+- **Kodi 20 Nexus or later** (this addon does **not** support Kodi 19 or earlier).
 
-# Installation & Updates
+---
 
-_You can install it via repository to provide automatic updates (future updates may require to rebuild database)_
+## 🔧 Installation & Updates
 
-- Download repository: [repository.otaku](https://github.com/Goldenfreddy0703/repository.otaku/blob/master/repository.otaku-1.0.zip?raw=true)
-- Or install it via Kodi file-manager
-  - add source: <https://goldenfreddy0703.github.io/repository.otaku>
+You can install this addon via the repository to enable **automatic updates**.  
+_Note: Some updates may require rebuilding the database._
 
-_or install it manually in the following order (future updates should not be installed manually and these download links could be outdated)_
+### 📥 Install via Repository (Recommended)
+1. **Download repository**: [repository.otaku.zip](https://github.com/Goldenfreddy0703/repository.otaku/blob/master/repository.otaku-1.0.zip?raw=true)
+2. **Install via Kodi File Manager**:
+   - Add this source: `https://goldenfreddy0703.github.io/repository.otaku`
+3. Install the repository and get automatic updates.
 
-- [context.otaku](https://github.com/Goldenfreddy0703/repository.otaku/raw/master/repo/zips/context.otaku/context.otaku-0.0.14.zip)
-- [script.otaku.themepak](https://github.com/Goldenfreddy0703/repository.otaku/raw/master/repo/zips/script.otaku.themepak/script.otaku.themepak-0.0.12.zip)
-- [script.otaku.mappings](https://github.com/Goldenfreddy0703/repository.otaku/raw/master/repo/zips/script.otaku.mappings/script.otaku.mappings-24.05.02.zip)
-- [plugin.video.otaku](https://github.com/Goldenfreddy0703/repository.otaku/raw/master/repo/zips/plugin.video.otaku/plugin.video.otaku-0.5.0.zip)
+### 🛠️ Manual Installation (Not Recommended)
+_Only use this if absolutely necessary. Future updates should be installed via the repository._
 
-After each update, it is recommended that you clear cache/rebuild database to make sure changes take effect.
+1. **Install dependencies in order**:
+   - [Context Menu Addon](https://github.com/Goldenfreddy0703/repository.otaku/raw/master/repo/zips/context.otaku/context.otaku-1.0.29.zip)
+   - [Otaku Addon](https://github.com/Goldenfreddy0703/repository.otaku/raw/master/repo/zips/plugin.video.otaku/plugin.video.otaku-5.2.45.zip)
 
-## Troubleshooting
+2. **Clear Cache & Rebuild Database**  
+   _After each update, it is recommended to clear the cache and rebuild the database to ensure all changes take effect._
 
-If you guys are having problems with Otaku, please feel free to contact me or take a look at the wiki or issues page.
+---
 
-[Otaku Wiki](https://github.com/Goldenfreddy0703/Otaku/wiki)
+## 🛠 Troubleshooting
 
-[Troubleshooting Tips For Otaku](https://github.com/Goldenfreddy0703/Otaku/issues/15)
+Having issues? Check out these resources:
 
-## Todo List
+- 📖 [Otaku Wiki](https://github.com/Goldenfreddy0703/Otaku/wiki)  
+- 💬 **Need Help?** Feel free to contact me via **Discord** or **Keybase** (details below).
 
-**_Function_**:
-- TVDB Episode Meta. (We Manage to find an api to help us with that)
+---
 
-**_Optional_**:
-- Accounts: Adding an Easy News Debrid Provider.
-- Accounts: Adding an Offcloud Debrid Provider.
+## ✅ Todo List (Optional Features)
 
-## Help needed with maintaining
+- 🔹 **Accounts:** Add **EasyNews** Debrid Provider
+- 🔹 **Accounts:** Add **OffCloud** Debrid Provider
 
-I am very clueless on this project currently cause this addon was made by SwagOtaku who has done a very great job creating this addon. Be aware that this is a community driven project, so feel free to submit PR's yourself to improve the code and/or help others with support on the issues etc. If you're willing to really participate in the development, please contact me so I can give you write access to the repo. I will do my best to maintain the project for SwagOtaku. Thanks for understanding!
+---
 
-All credit goes to SwagOtaku
+## 🤝 Help Wanted!  
 
-## Contact
+I am very clueless on this project currently cause this addon was made by SwagOtaku who has done a very great job creating this addon. Be aware that this is a community-driven project, so feel free to submit PRs yourself to improve the code and/or help others with support on the issues etc. If you're willing to really participate in the development, please contact me so I can give you write access to the repo. I will do my best to maintain the project for SwagOtaku. Thanks for understanding!
 
-Discord: The Steampunk Owl#3126
+---
 
-Keybase: [Goldenfreddy0703](https://keybase.io/goldenfreddy0703)
+## 📬 Contact
 
-## Disclaimer 
+- **💬 Discord:** The Steampunk Owl#3126  
+- **🔑 Keybase:** [Goldenfreddy0703](https://keybase.io/goldenfreddy0703)
+- **🐛 Bug Reports & Troubleshooting:** [Github Issues](https://github.com/Goldenfreddy0703/Otaku/issues)
+- **🌐 Join the Addons4Kodi Discord for Otaku Support:** https://discord.gg/SqX7buB
 
-Otaku is and always will be free and open-source. None of its code and resources may be sold or redistributed for any commercial purposes. This addon and its developers **DO NOT** host, create, or distribute any of the content displayed in the addon, it simply scrapes ad financed public websites. It is the responsibility of the user to ensure that they are following all applicable laws and regulations in their country. This addon and its developers are not in any way affiliated with Team Kodi or any of the sites and providers used in the addon.
+---
 
-## License
+## ⚠️ Disclaimer
 
-Licensed under The GPL License.
+Otaku is and always will be free and open-source. None of its code and resources may be sold or redistributed for any commercial purposes. This addon and its developers DO NOT host, create, or distribute any of the content displayed in the addon; it simply scrapes ad-financed public websites. It is the responsibility of the user to ensure that they are following all applicable laws and regulations in their country. This addon and its developers are not in any way affiliated with Team Kodi or any of the sites and providers used in the addon.
+
+---
+
+## 📜 License
+
+Otaku is licensed under the **GPL-3.0 License**.  
+🔗 Read more: [GPL-3.0 License](https://opensource.org/licenses/GPL-3.0)  
+
+---
