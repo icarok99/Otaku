@@ -264,10 +264,11 @@ class Sources(BrowserBase):
         return source
 
     def append_cache_uncached_noduplicates(self):
+        # Keep one source per (hash, debrid_provider) so multiple providers can show for the same torrent
         unique = {}
         for source in self.sources:
-            key = source.get('hash')
-            if not key:
+            key = (source.get('hash'), source.get('debrid_provider'))
+            if not key[0]:
                 continue
             if key in unique:
                 current = unique[key]
