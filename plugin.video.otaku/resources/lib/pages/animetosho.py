@@ -299,9 +299,6 @@ class Sources(BrowserBase):
             'seeders': res['seeders'],
         }
 
-        if source.get('debrid_provider', '').lower() == 'easydebrid':
-            source['type'] = 'hoster'
-
         match = re.match(r'(\d+).(\d+) (\w+)', res['size'])
         if match:
             source['byte_size'] = source_utils.convert_to_bytes(float(f'{match.group(1)}.{match.group(2)}'), match.group(3))
