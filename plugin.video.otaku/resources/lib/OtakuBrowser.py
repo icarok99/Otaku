@@ -1989,7 +1989,6 @@ class OtakuBrowser(BrowserBase):
 
         return base
 
-
     def database_update_show(self, mal_res=None, anilist_res=None):
         """
         Combines MAL and AniList data for database update.

@@ -223,30 +223,30 @@ class OtakuAPI:
         url = f"{mal_id}/{episode}"
         # Fallback logic for title
         title = (
-            (anidb_meta.get('title') if anidb_meta else None) or
-            (simkl_meta.get('title') if simkl_meta else None) or
-            (jikan_meta.get('title') if jikan_meta else None) or
-            (anizip_meta['title']['en'] if anizip_meta and anizip_meta.get('title') and 'en' in anizip_meta['title'] else None) or
-            (kitsu_meta['attributes'].get('canonicalTitle') if kitsu_meta and kitsu_meta.get('attributes') and kitsu_meta['attributes'].get('canonicalTitle') else None) or
-            res.get('title') or
-            res.get('episode') or
-            f"Episode {episode}"
+            (anidb_meta.get('title') if anidb_meta else None)
+            or (simkl_meta.get('title') if simkl_meta else None)
+            or (jikan_meta.get('title') if jikan_meta else None)
+            or (anizip_meta['title']['en'] if anizip_meta and anizip_meta.get('title') and 'en' in anizip_meta['title'] else None)
+            or (kitsu_meta['attributes'].get('canonicalTitle') if kitsu_meta and kitsu_meta.get('attributes') and kitsu_meta['attributes'].get('canonicalTitle') else None)
+            or res.get('title')
+            or res.get('episode')
+            or f"Episode {episode}"
         )
         # Fallback logic for image (AniDB does not provide images)
         image = (
-            (self.simklImagePath % simkl_meta['img'] if simkl_meta and simkl_meta.get('img') else None) or
-            (anizip_meta['image'] if anizip_meta and anizip_meta.get('image') else None) or
-            (kitsu_meta['attributes']['thumbnail']['original'] if kitsu_meta and kitsu_meta.get('attributes') and kitsu_meta['attributes'].get('thumbnail') and kitsu_meta['attributes']['thumbnail'].get('original') else None) or
-            poster
+            (self.simklImagePath % simkl_meta['img'] if simkl_meta and simkl_meta.get('img') else None)
+            or (anizip_meta['image'] if anizip_meta and anizip_meta.get('image') else None)
+            or (kitsu_meta['attributes']['thumbnail']['original'] if kitsu_meta and kitsu_meta.get('attributes') and kitsu_meta['attributes'].get('thumbnail') and kitsu_meta['attributes']['thumbnail'].get('original') else None)
+            or poster
         )
         # Fallback logic for plot
         plot = (
-            (anidb_meta.get('summary') if anidb_meta else None) or
-            (simkl_meta.get('description') if simkl_meta else None) or
-            (jikan_meta.get('synopsis') if jikan_meta else None) or
-            (anizip_meta.get('overview') if anizip_meta else None) or
-            (kitsu_meta['attributes'].get('synopsis') if kitsu_meta and kitsu_meta.get('attributes') and kitsu_meta['attributes'].get('synopsis') else None) or
-            'No plot available'
+            (anidb_meta.get('summary') if anidb_meta else None)
+            or (simkl_meta.get('description') if simkl_meta else None)
+            or (jikan_meta.get('synopsis') if jikan_meta else None)
+            or (anizip_meta.get('overview') if anizip_meta else None)
+            or (kitsu_meta['attributes'].get('synopsis') if kitsu_meta and kitsu_meta.get('attributes') and kitsu_meta['attributes'].get('synopsis') else None)
+            or 'No plot available'
         )
         info = {
             'UniqueIDs': {
