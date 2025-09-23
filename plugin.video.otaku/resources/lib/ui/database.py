@@ -209,6 +209,13 @@ def get_info(api_name):
         return api_info
 
 
+def get_mal_ids(anime_id, send_id):
+    with SQL(control.mappingDB) as cursor:
+        cursor.execute(f'SELECT * FROM anime WHERE {send_id}=?', (anime_id,))
+        mappings = cursor.fetchall()
+        return mappings if mappings else []
+
+
 def get_mappings(anime_id, send_id):
     with SQL(control.mappingDB) as cursor:
         cursor.execute(f'SELECT * FROM anime WHERE {send_id}=?', (anime_id,))

@@ -454,7 +454,6 @@ class KitsuWLF(WatchlistFlavorBase):
             base['url'] = f"play_movie/{mal_id}/"
             base['info']['mediatype'] = 'movie'
             return utils.parse_view(base, False, True, dub)
-
         return utils.parse_view(base, True, False, dub)
 
     def mapping_mal(self, kitsu_id):

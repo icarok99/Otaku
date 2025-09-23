@@ -1743,6 +1743,224 @@ def PLAY_MOVIE(payload, params):
     control.exit_code()
 
 
+@Route('tmdb_helper')
+def TMDB_HELPER(payload, params):
+    # --- Extract all relevant parameters from params and actionArgs ---
+    import ast
+    from resources.lib.OtakuBrowser import OtakuBrowser
+    from resources.lib.endpoints import tmdb
+
+    action_args = params.pop('actionArgs', {})
+    if isinstance(action_args, str):
+        action_args = ast.literal_eval(action_args)
+    # Now it's safe to use .get
+    item_type = action_args.get('item_type')
+
+    # Extract parameters from action_args
+    item_type = action_args.get('item_type')
+    tmdb_id = action_args.get('tmdb_id')
+    tvdb_id = action_args.get('tvdb_id')
+    imdb_id = action_args.get('imdb_id')
+    trakt_id = action_args.get('trakt_id')
+    season = action_args.get('season')
+    episode = action_args.get('episode')
+
+    # Extract source_select from params (default to False)
+    source_select = params.pop('source_select', 'false') == 'true'
+    params.update({'source_select': source_select})
+
+    # Convert season and episode to int if present
+    season_number = int(season) if season is not None else None
+    episode_number = int(episode) if episode is not None else None
+
+    # Grab Playstyle settings
+    smartplay = control.getBool('general.smartplay')
+    playstyle_movie = control.getInt('general.playstyle.movie')
+    playstyle_episode = control.getInt('general.playstyle.episode')
+
+    # Disable SmartPlay temporarily
+    if smartplay:
+        control.setBool('general.smartplay', False)
+
+    # Parms cleanup
+    parms = {}
+
+    # Now all parameters are available: item_type, tmdb_id, title_url, season_number, episode_number, source_select
+    control.log("Item Type: " + str(item_type))
+    control.log("TMDB ID: " + str(tmdb_id))
+    control.log("TVDB ID: " + str(tvdb_id))
+    control.log("IMDB ID: " + str(imdb_id))
+    control.log("Trakt ID: " + str(trakt_id))
+    control.log("Season Number: " + str(season_number))
+    control.log("Episode Number: " + str(episode_number))
+    control.log("Source Select: " + str(source_select))
+
+    if item_type == 'movie':
+        mal_id = None
+        id_sources = [
+            ('themoviedb_id', tmdb_id),
+            ('thetvdb_id', tvdb_id),
+            ('imdb_id', imdb_id),
+            ('trakt_id', trakt_id)
+        ]
+
+        for key, value in id_sources:
+            if value:
+                anime_ids = database.get_mappings(value, key)
+                if anime_ids and anime_ids.get('mal_id'):
+                    mal_id = anime_ids['mal_id']
+                    break
+
+        if mal_id:
+            OtakuBrowser().get_anime_data(mal_id)
+
+            if source_select:
+                control.setInt('general.playstyle.movie', 1)
+            else:
+                control.setInt('general.playstyle.movie', 0)
+
+            PLAY_MOVIE(f"{mal_id}/", parms)
+            control.sleep(3000)
+            control.setInt('general.playstyle.movie', playstyle_movie)
+            control.setBool('general.smartplay', smartplay)
+            return
+        else:
+            control.sleep(3000)
+            control.setInt('general.playstyle.movie', playstyle_movie)
+            control.setBool('general.smartplay', smartplay)
+            control.notify(control.ADDON_NAME, 'No MAL ID found from this movie')
+            return
+
+    else:
+        mal_ids = set()
+        id_sources = [
+            ('themoviedb_id', tmdb_id),
+            ('thetvdb_id', tvdb_id),
+            ('imdb_id', imdb_id),
+            ('trakt_id', trakt_id)
+        ]
+
+        for key, value in id_sources:
+            if value:
+                mappings = database.get_mal_ids(value, key)  # Now returns a list
+                for anime_ids in mappings:
+                    if anime_ids and 'mal_id' in anime_ids and anime_ids['mal_id']:
+                        if isinstance(anime_ids['mal_id'], list):
+                            mal_ids.update(anime_ids['mal_id'])
+                        else:
+                            mal_ids.add(anime_ids['mal_id'])
+
+        if mal_ids:
+            episode_titles = tmdb.get_episode_titles(tmdb_id, season_number, episode_number)
+            match = find_episode_by_title(mal_ids, episode_titles)            
+            if match:
+                mal_id = match['mal_id']
+                episode_num = match['episode_number']
+                matched_title = match['matched_title']
+                control.log(f"Matched MAL ID: {mal_id} for Episode {episode_num} titled '{matched_title}'")
+                OtakuBrowser().get_anime_data(mal_id)
+                MetaBrowser.get_anime_init(mal_id)
+
+                if source_select:
+                    control.setInt('general.playstyle.episode', 1)
+                else:
+                    control.setInt('general.playstyle.episode', 0)
+
+                PLAY(f"{mal_id}/{episode_num}", parms)
+                control.sleep(3000)
+                control.setInt('general.playstyle.episode', playstyle_episode)
+                control.setBool('general.smartplay', smartplay)
+                return
+            else:
+                control.sleep(3000)
+                control.setInt('general.playstyle.episode', playstyle_episode)
+                control.setBool('general.smartplay', smartplay)
+                control.notify(control.ADDON_NAME, 'No MAL ID found from this episode')
+                return
+
+
+def remove_punctuation(s):
+    import re
+    return re.sub(r'[^\w\s]', '', s)
+
+
+def find_episode_by_title(mal_ids, episode_titles):
+    # ...existing code...
+    # After matching episode, extract rating/score and aired date if available
+    # This assumes 'res' or 'ep' is the episode meta dict from Jikan
+    # Add these fields to the info dict where episode match is found
+    import time
+    from resources.lib.indexers.jikanmoe import JikanAPI
+    from resources.lib.ui.source_utils import cleanTitle
+    # Split titles on '|' and clean each part
+    split_titles = []
+    for t in episode_titles:
+        if t:
+            split_titles.extend([x.strip() for x in t.split('|') if x.strip()])
+    # Clean and normalize titles, ignore spaces and punctuation
+    cleaned_titles = set(remove_punctuation(cleanTitle(t)).replace(' ', '').lower() for t in split_titles)
+    jikan_api = JikanAPI()
+    requests_made = 0
+    last_request_time = time.time()
+    for mal_id in mal_ids:
+        # Rate limit: max 3 requests every 4 seconds, space each request by at least 1.33 seconds
+        if requests_made == 3:
+            elapsed = time.time() - last_request_time
+            if elapsed < 4.0:
+                time.sleep(4.0 - elapsed)
+            requests_made = 0
+            last_request_time = time.time()
+        # Space each request by at least 1.33 seconds
+        if requests_made > 0:
+            time.sleep(1.33)
+        # Retry logic for HTTP 429
+        retries = 0
+        max_retries = 3
+        backoff = 2
+        while retries <= max_retries:
+            try:
+                episodes = jikan_api.get_episode_meta(mal_id)
+                requests_made += 1
+                break
+            except Exception as e:
+                if hasattr(e, 'response') and getattr(e.response, 'status_code', None) == 429:
+                    control.log(f"Jikan API rate limited (429) for mal_id {mal_id}, retrying in {backoff} seconds...")
+                    time.sleep(backoff)
+                    retries += 1
+                    backoff *= 2
+                else:
+                    control.log(f"Jikan API error for mal_id {mal_id}: {e}")
+                    episodes = []
+                    break
+        else:
+            control.log(f"Jikan API failed for mal_id {mal_id} after {max_retries} retries.")
+            episodes = []
+        for ep in episodes:
+            candidates = [
+                ep.get('title', ''),
+                # ep.get('title_japanese', ''),
+                ep.get('title_romanji', '')
+            ]
+            split_candidates = []
+            for candidate in candidates:
+                if candidate:
+                    split_candidates.extend([x.strip() for x in candidate.split('|') if x.strip()])
+            for candidate in split_candidates:
+                cleaned_candidate = remove_punctuation(cleanTitle(candidate)).replace(' ', '').lower() if candidate else ''
+                # Direct match ignoring spaces and punctuation
+                if cleaned_candidate in cleaned_titles:
+                    control.log(f"MATCH FOUND: Jikan '{candidate}' matched TMDB title.")
+                    info = {
+                        'mal_id': mal_id,
+                        'episode_number': ep.get('mal_id'),
+                        'matched_title': candidate,
+                    }
+                    return info
+                else:
+                    control.log(f"No match for Jikan '{candidate}' (cleaned: '{cleaned_candidate}')")
+    return None  # No match found
+
+
 @Route('marked_as_watched/*')
 @Route('marked_as_watched_tv_show/*')
 @Route('marked_as_watched_movie/*')
