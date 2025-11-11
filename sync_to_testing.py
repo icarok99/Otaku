@@ -4,7 +4,7 @@ import shutil
 
 # Source and destination base directories
 src_base = r"C:\Users\jenki\Documents\Github\Otaku"
-dst_base = r"C:\Users\jenki\Documents\Github\Otaku-Testing\plugin.video.otaku.testing"
+dst_base = r"C:\Users\jenki\Documents\Github\Otaku\plugin.video.otaku"
 
 # Files to exclude
 exclude_files = {"addon.xml", "changelog.txt", "news.txt", "sync_to_testing.py"}
