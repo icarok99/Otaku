@@ -136,6 +136,84 @@ def __extract_yourupload(url, page_content, referer=None):
     return
 
 
+def __extract_anivideo(url, page_content, referer=None):
+    headers = {
+        'User-Agent': _EDGE_UA,
+        'Referer': referer or 'https://animesdigital.org/'
+    }
+    control.log(f"[anivideo] Checking: {url}")
+    page_content += __get_packed_data(page_content)
+
+    parsed = urlparse(url)
+    qs = parse_qs(parsed.query)
+    m3u8_param = qs.get('d', [None])[0]
+    if m3u8_param and '.m3u8' in m3u8_param:
+        control.log(f"[anivideo] Found d= direct: {m3u8_param}")
+        return m3u8_param + __append_headers(headers)
+
+    r = re.search(r"file:\s*['\"](https?://[^'\"]+\.m3u8[^'\"]*)['\"]", page_content)
+    if r:
+        found = r.group(1)
+        control.log(f"[anivideo] Found file field: {found}")
+        return found + __append_headers(headers)
+
+    r2 = re.search(r'https?://[^\s"\']+\.m3u8[^\s"\']*', page_content)
+    if r2:
+        found = r2.group(0)
+        control.log(f"[anivideo] Found direct m3u8: {found}")
+        return found + __append_headers(headers)
+
+    try:
+        html = client.request(url, headers=headers)
+        if html:
+            html += __get_packed_data(html)
+            r3 = re.search(r"file:\s*['\"](https?://[^'\"]+\.m3u8[^'\"]*)['\"]", html)
+            if r3:
+                found = r3.group(1)
+                control.log(f"[anivideo] Found after fetch: {found}")
+                return found + __append_headers(headers)
+    except Exception as e:
+        control.log(f"[anivideo] Request error: {e}")
+
+    control.log(f"[anivideo] No .m3u8 found for: {url}")
+    return None
+
+def __extract_animefhd(url, page_content, referer=None):
+    headers = {
+        'User-Agent': _EDGE_UA,
+        'Referer': referer or 'https://animefhd.com/'
+    }
+    control.log(f"[animefhd] Checking: {url}")
+    page_content += __get_packed_data(page_content)
+
+    r = re.search(r"file:\s*['\"](https?://[^'\"]+\.m3u8[^'\"]*)['\"]", page_content)
+    if r:
+        found = r.group(1)
+        control.log(f"[animefhd] Found in JS: {found}")
+        return found + __append_headers(headers)
+
+    r2 = re.search(r'https?://[^\s"\']+\.m3u8[^\s"\']*', page_content)
+    if r2:
+        found = r2.group(0)
+        control.log(f"[animefhd] Found in HTML: {found}")
+        return found + __append_headers(headers)
+
+    try:
+        html = client.request(url, headers=headers)
+        if html:
+            html += __get_packed_data(html)
+            r3 = re.search(r"file:\s*['\"](https?://[^'\"]+\.m3u8[^'\"]*)['\"]", html)
+            if r3:
+                found = r3.group(1)
+                control.log(f"[animefhd] Found in fetched HTML: {found}")
+                return found + __append_headers(headers)
+    except Exception as e:
+        control.log(f"[animefhd] Request error: {e}")
+
+    control.log(f"[animefhd] No .m3u8 found for: {url}")
+    return None
+
+
 def __extract_mp4upload(url, page_content, referer=None):
     page_content += __get_packed_data(page_content)
     r = re.search(r'src\("([^"]+)', page_content) or re.search(r'src:\s*"([^"]+)', page_content)
@@ -536,3 +614,9 @@ __register_extractor(["https://lulustream.com",
                       "https://luluvdo.com",
                       "https://kinoger.pw"],
                      __extract_lulu)
+
+__register_extractor(["https://api.anivideo.net/"], __extract_anivideo)
+
+__register_extractor(["https://animefhd.com/playerhls",
+                      "https://www.animefhd.com/playerhls"],
+                     __extract_animefhd)

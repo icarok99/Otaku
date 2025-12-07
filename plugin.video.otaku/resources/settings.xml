@@ -828,12 +828,22 @@
 				</setting>
 				<setting id="provider.animepahe" type="boolean" label="30237" help="">
 					<level>0</level>
+					<default>false</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="provider.animesdg" type="boolean" label="30448" help="">
+					<level>0</level>
+					<default>true</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="provider.animess" type="boolean" label="30449" help="">
+					<level>0</level>
 					<default>true</default>
 					<control type="toggle"/>
 				</setting>
 				<setting id="provider.animix" type="boolean" label="30238" help="">
 					<level>0</level>
-					<default>true</default>
+					<default>false</default>
 					<control type="toggle"/>
 				</setting>
 				<setting id="provider.animixalt" type="boolean" label="30243" help="" parent="provider.animix">
@@ -846,12 +856,12 @@
 				</setting>
 				<setting id="provider.aniwave" type="boolean" label="30239" help="">
 					<level>0</level>
-					<default>true</default>
+					<default>false</default>
 					<control type="toggle"/>
 				</setting>
 				<!-- <setting id="provider.gogo" type="boolean" label="30236" help="">
 					<level>0</level>
-					<default>true</default>
+					<default>false</default>
 					<control type="toggle"/>
 				</setting>
 				<setting id="provider.gogoalt" type="boolean" label="30242" help="" parent="provider.gogo">
@@ -864,7 +874,7 @@
 				</setting> -->
 				<setting id="provider.hianime" type="boolean" label="30235" help="">
 					<level>0</level>
-					<default>true</default>
+					<default>false</default>
 					<control type="toggle"/>
 				</setting>
 				<setting id="provider.hianimealt" type="boolean" label="30241" help="" parent="provider.hianime">
@@ -877,7 +887,7 @@
 				</setting>
 				<setting id="provider.watchnixtoons2" type="boolean" label="30379" help="">
 					<level>0</level>
-					<default>true</default>
+					<default>false</default>
 					<control type="toggle"/>
 				</setting>
 			</group>
